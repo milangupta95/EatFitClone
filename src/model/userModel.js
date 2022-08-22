@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const secret = require('../../secrets');
-const dblink = secret.dblink;
+const secret = process.env || require('../../secrets');
+const dblink = process.env.dblink || secret.dblink;
 mongoose.
 connect(dblink,{useNewUrlParser: true, useUnifiedTopology: true}).
 then(function(){

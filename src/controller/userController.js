@@ -1,6 +1,6 @@
 const FoodUserModel = require('../model/userModel');
 const jwt = require('jsonwebtoken');
-const secret = require('../../secrets');
+const secret = process.env || require('../../secrets');
 async function getallUserController(req,res) {
     res.send("You are Logged In");
 }
