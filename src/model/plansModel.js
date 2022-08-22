@@ -21,6 +21,13 @@ let plansSchema = new mongoose.Schema({
             },
             message: "Discount Price can't exceed Selling Price"
         }
+    },
+    reviews: {
+        type: [mongoose.Schema.ObjectId],
+        ref: "FoodReviewModel"
+    },
+    averageRating: {
+        type:Number
     }
 });
 

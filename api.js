@@ -6,10 +6,11 @@ app.use(express.json());
 const authRouter = require("./src/Routes/authRoutes");
 const userRouter = require("./src/Routes/userRoutes");
 const planRouter = require("./src/Routes/plansRoutes");
+const reviewRouter = require("./src/Routes/reviewRoutes");
 app.use("/api/v1/auth",authRouter);
 app.use("/api/v1/user",userRouter);
 app.use("/api/v1/plans",planRouter);
-
+app.use("/api/v1/review",reviewRouter);
 const port = process.env.port || 3000;
 app.listen(port,function() {
     console.log("App Has been Started at 3000");

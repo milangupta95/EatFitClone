@@ -16,7 +16,8 @@ try {
         },
         email: {
             type: String,
-            required: [true, "Email can't be null"]
+            required: [true, "Email can't be null"],
+            unique: [true,"User with this email Already exists"]
         },
         password: {
             type: String,
@@ -35,7 +36,7 @@ try {
         },
         phone: {
             type: Number,
-            required: [true, "Phone Number can't be null"]
+            unique: [true,"User with this phone number Already Exists"]
         },
         pic: {
             type: String,
