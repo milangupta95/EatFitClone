@@ -7,13 +7,12 @@ async function signupController(req,res) {
         let data = req.body;
         console.log(data);
         let user = await FoodUserModel.create(data);
-        console.log(user);
         res.status(201).json({
             data: user,
             message:"The User Has Been Created SuccesFully"
         });
     } catch(err) {
-        res.json({
+        res.status(500).json({
             "Error":err
         });
     }
@@ -57,20 +56,28 @@ async function loginController(req,res) {
 async function forgetpasswordController(req,res){
     try {
         let email = req.email;
-        let otp = otpGenerator();
-        let afterFiveMinute = Date.now() + 5 * 60 * 60;
-        let user = await FoodUserModel.findOneAndUpdate(
-            {email:email},
-            {otp:otp,otpExpiry:afterFiveMinute},
-            {new:true});
-
-        console.log(user);
-        res.json({
-            data: user,
-            message: "Otp has been sucessfully Sent to your email"
-        })
+        let user = await FoodUserModel.findOne({email:email});
+        if(user) {
+            let otp = otpGenerator();
+            let afterFiveMinute = Date.now() + 5 * 60 * 60;
+            let user = await FoodUserModel.findOneAndUpdate(
+                {email:email},
+                {otp:otp,otpExpiry:afterFiveMinute},
+                {new:true});
+            
+            res.status(200).json({
+                data: user,
+                message: "Otp has been sucessfully Sent to your email"
+            })
+        } else {
+            res.status(404).json({
+                result: "User with this Email is Not Found"
+            })
+        }
     } catch(err) {
-        res.send(err.message);
+        res.status(500).json({
+            result: err.message
+        });
     }
 }
 async function resetpasswordController(req,res) {
@@ -82,12 +89,14 @@ async function resetpasswordController(req,res) {
             delete user.otp;
             delete user.otpExpiry;
             await user.save();
-            res.json({
+            res.status(408).json({
                 message:"Otp Has Been Expired"
             });
         } else {
             if(user.otp != otp ) {
-                res.send("The Otp doesn't Match");
+                res.status(401).json({
+                    result:"The Otp doesn't Match"
+                });
             } else {
                 user = await FoodUserModel.findOneAndUpdate({otp},
                     {password,confirmPassword},
@@ -95,16 +104,16 @@ async function resetpasswordController(req,res) {
                 delete user.otp;
                 delete user.otpExpiry;
                 await user.save();
-                console.log(user);
-                res.json({
+                res.status(200).json({
                     data: user,
                     message:"The Password Has been Updated Sucessfully"
                 });
             }
         }
-        
     }catch(err) {
-        res.send(err.message);
+        res.status(500).json({
+            result:err.message
+        });
     }
 }
 function otpGenerator() {
