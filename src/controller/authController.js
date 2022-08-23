@@ -1,12 +1,14 @@
 const FoodUserModel = require('../model/userModel');
 const jwt = require('jsonwebtoken');
-const secret = process.env || require('../../secrets');
+const secretKey = process.env.secretKey || require('../../secrets').secretKey;
+const sendMail = require("../utility/mailer");
+
 async function signupController(req,res) {
     try {
         console.log("SignUp Called");
         let data = req.body;
-        console.log(data);
         let user = await FoodUserModel.create(data);
+        console.log(user);
         res.status(201).json({
             data: user,
             message:"The User Has Been Created SuccesFully"
@@ -23,11 +25,11 @@ async function loginController(req,res) {
         if(email) {
             let user = await FoodUserModel.findOne({email:email});
             if(user) {
-                if(user.password == password) {
+                if(user.password === password) {
                     let userToken = jwt.sign({
                         data:user["_id"],
                         exp: Date.now() / 1000 + 24*60*60},
-                        secret.secretKey);
+                        secretKey);
                     res.cookie('JWT',userToken);
                     res.status(200).json({
                         data: user,
@@ -48,23 +50,25 @@ async function loginController(req,res) {
             });
         }
     } catch(err) {
-        console.status(500).json({
+        res.status(500).json({
             result: err.message
         });
     }
 }
 async function forgetpasswordController(req,res){
     try {
-        let email = req.email;
+        let email = req.body.email;
+        console.log(email);
         let user = await FoodUserModel.findOne({email:email});
+        console.log(user);
         if(user) {
             let otp = otpGenerator();
-            let afterFiveMinute = Date.now() + 5 * 60 * 60;
-            let user = await FoodUserModel.findOneAndUpdate(
-                {email:email},
-                {otp:otp,otpExpiry:afterFiveMinute},
-                {new:true});
-            
+            let afterFiveMinute = (Date.now()) + 5 * 60 * 60 * 1000;
+            let user = await FoodUserModel.findOne({email:email});
+            user.otp = otp;
+            user.otpExpiry = afterFiveMinute;
+            await user.save();
+            await sendMail(email,otp);
             res.status(200).json({
                 data: user,
                 message: "Otp has been sucessfully Sent to your email"
@@ -83,18 +87,18 @@ async function forgetpasswordController(req,res){
 async function resetpasswordController(req,res) {
     try{
         let {otp,email,password,confirmPassword} = req.body;
-        let user = await FoodUserModel.find({email:email});
+        let user = await FoodUserModel.findOne({email:email});
         let currTime = Date.now();
         if(currTime > user.otpExpiry ) {
             delete user.otp;
             delete user.otpExpiry;
             await user.save();
-            res.status(408).json({
+            res.status(201).json({
                 message:"Otp Has Been Expired"
             });
         } else {
             if(user.otp != otp ) {
-                res.status(401).json({
+                res.status(400).json({
                     result:"The Otp doesn't Match"
                 });
             } else {
@@ -117,7 +121,7 @@ async function resetpasswordController(req,res) {
     }
 }
 function otpGenerator() {
-    return Math.floor(1000000 + Math.random() * 900000);
+    return Math.floor(100000 + Math.random() * 900000);
 }
 
 module.exports = {

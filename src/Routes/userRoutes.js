@@ -8,5 +8,4 @@ const {
 const userRouter = express.Router();
 userRouter.post("/users",privateRoute,getallUserController);
 userRouter.post("/user",privateRoute,userController);
-
 module.exports = userRouter;
