@@ -1,5 +1,5 @@
 const PlanUserModel = require('../model/plansModel');
-async function getallPlansController(req,res) {
+async function getallPlansController(res) {
     try {
         let plans = await PlanUserModel.find();
         res.status(200).json({
