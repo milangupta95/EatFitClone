@@ -1,16 +1,16 @@
 const express = require('express');
 const app = express();
 app.use(express.json());
-// const cookieparser = require('cookieparser');
-// app.use(cookieparser());
-// const authRouter = require("./src/Routes/authRoutes");
-// const userRouter = require("./src/Routes/userRoutes");
-// const planRouter = require("./src/Routes/plansRoutes");
-// const reviewRouter = require("./src/Routes/reviewRoutes");
-// app.use("/api/v1/auth",authRouter);
-// app.use("/api/v1/user",userRouter);
-// app.use("/api/v1/plans",planRouter);
-// app.use("/api/v1/review",reviewRouter);
+const cookieparser = require('cookieparser');
+app.use(cookieparser());
+const authRouter = require("./src/Routes/authRoutes");
+const userRouter = require("./src/Routes/userRoutes");
+const planRouter = require("./src/Routes/plansRoutes");
+const reviewRouter = require("./src/Routes/reviewRoutes");
+app.use("/api/v1/auth",authRouter);
+app.use("/api/v1/user",userRouter);
+app.use("/api/v1/plans",planRouter);
+app.use("/api/v1/review",reviewRouter);
 
 app.get("/",function(req,res){
     res.status(200).send("Home Page");
