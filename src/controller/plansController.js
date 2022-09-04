@@ -6,7 +6,7 @@ async function getallPlansController(res) {
             Allplans : plans
         });
     } catch(err) {
-        res.status(500).json({
+        res.json({
             result: "Server Error"
         });
     }
