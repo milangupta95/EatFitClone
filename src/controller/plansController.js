@@ -1,12 +1,14 @@
 const PlanUserModel = require('../model/plansModel');
-async function getallPlansController(res) {
+async function getallPlansController(req,res) {
     try {
         let plans = await PlanUserModel.find();
         res.status(200).json({
             Allplans : plans
         });
     } catch(err) {
-        res.send(err);
+        res.status(500).json({
+            result: "Server Error"
+        });
     }
 }
 async function getplanController(req,res) {
