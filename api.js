@@ -14,8 +14,8 @@ app.use("/api/v1/review",reviewRouter);
 
 app.get("/",function(req,res){
     res.status(200).send("Home Page");
-})
-const port = process.env.PORT || 3000;
-app.listen(port,function() {
+});
+
+app.listen(process.env.PORT || 3000,function() {
     console.log("App Has been Started at 3000");
 });
