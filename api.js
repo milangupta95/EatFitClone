@@ -11,7 +11,6 @@ app.use("/api/v22/auth",authRouter);
 app.use("/api/v22/user",userRouter);
 app.use("/api/v22/plans",planRouter);
 app.use("/api/v22/review",reviewRouter);
-
 app.get("/",function(req,res){
     res.status(200).send("Home Page");
 });
