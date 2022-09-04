@@ -11,6 +11,10 @@ app.use("/api/v1/auth",authRouter);
 app.use("/api/v1/user",userRouter);
 app.use("/api/v1/plans",planRouter);
 app.use("/api/v1/review",reviewRouter);
+
+app.get("/",function(req,res){
+    res.status(200).send("Home Page");
+})
 const port = process.env.PORT || 3000;
 app.listen(port,function() {
     console.log("App Has been Started at 3000");
