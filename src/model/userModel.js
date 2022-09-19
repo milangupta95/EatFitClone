@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bookingModel = require('./bookingModel');
 const dblink = process.env.dblink || require('../../secrets').dblink;
 try {
     mongoose.
@@ -47,6 +48,10 @@ try {
         },
         otpExpiry: {
             type: Date
+        },
+        bookings: {
+            type: [mongoose.Schema.ObjectId],
+            ref: bookingModel
         }
     });
     const userModel = mongoose.model('FoodUserModel', userSchema);

@@ -7,10 +7,12 @@ const authRouter = require("./src/Routes/authRoutes");
 const userRouter = require("./src/Routes/userRoutes");
 const planRouter = require("./src/Routes/plansRoutes");
 const reviewRouter = require("./src/Routes/reviewRoutes");
-app.use("/api/v22/auth",authRouter);
-app.use("/api/v22/user",userRouter);
-app.use("/api/v22/plans",planRouter);
-app.use("/api/v22/review",reviewRouter);
+const bookingRouter = require("./src/Routes/bookingRoutes");
+app.use("/api/v1/auth",authRouter);
+app.use("/api/v1/user",userRouter);
+app.use("/api/v1/plans",planRouter);
+app.use("/api/v1/review",reviewRouter);
+app.use("/api/v1/booking",bookingRouter);
 app.get("/",function(req,res){
     res.status(200).send("Home Page");
 });
