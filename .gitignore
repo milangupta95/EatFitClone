@@ -1,4 +1,4 @@
-secrets.js
+secrets
 logo.txt
 node_modules
-
+.DS_Store
